@@ -1,171 +1,58 @@
-# PyChat – Real-Time TCP Chat Application
+# Overview
 
-A Python client-server chat application built from scratch using TCP sockets and threading. Multiple clients can connect to a central server simultaneously, announce themselves, broadcast messages to the room, and check who is online — all in real time from the terminal.
+As a software engineer, I am always looking for ways to deepen my understanding of how computers communicate with each other at a low level. Most modern applications — messaging apps, multiplayer games, collaborative tools — rely on networking under the hood, and I wanted to experience that firsthand by building something from scratch rather than just reading about it.
 
----
+PyChat is a real-time terminal chat application built in Python using TCP sockets and threading. A central server accepts multiple client connections simultaneously, and connected users can announce themselves, broadcast messages to the room, and check who is online — all in real time.
 
-## 🎥 Demo Video
+To use PyChat, you need to run two programs:
 
-> [https://drive.google.com/file/d/1sOQHxrybgLU1SMoxep3wcCU0G5k3YFu1/view?usp=sharing]
+1. **Start the server first** — open a terminal and run `python server.py`. The server will start listening on port 54321.
+2. **Connect clients** — open a second terminal (and a third for a second user) and run `python client.py` in each. Once connected, use the following commands:
+   - `JOIN:<your name>` — enter the chat room and announce yourself
+   - `MESSAGE:<text>` — broadcast a message to everyone online
+   - `LIST` — see who is currently connected
+   - `quit` — disconnect and exit
 
----
+My purpose in writing this software was to move beyond theoretical knowledge of networking concepts like TCP, ports, and the client-server model and actually implement them in working code. I wanted to understand how blocking socket calls work, why threads are necessary for handling multiple clients, and how to keep shared data safe across threads using locks.
 
-## Overview
+[Software Demo Video](https://drive.google.com/file/d/1sOQHxrybgLU1SMoxep3wcCU0G5k3YFu1/view?usp=sharing)
 
-| Field         | Details                                                          |
-| ------------- | ---------------------------------------------------------------- |
-| **Course**    | CSE 310 – Applied Programming                                    |
-| **Module**    | Networking                                                       |
-| **Author**    | Pastor Munashe Zimondi                                           |
-| **Language**  | Python 3                                                         |
-| **Protocol**  | TCP (socket.SOCK_STREAM)                                         |
-| **Libraries** | `socket`, `threading`, `sys` (all built-in — no installs needed) |
+# Network Communication
 
----
+PyChat uses the **Client-Server** architecture. The server (`server.py`) acts as the central hub — it accepts connections from multiple clients and is responsible for routing messages between them. Each client (`client.py`) connects to the server, sends requests, and receives responses. Clients do not communicate directly with each other.
 
-## Features
+PyChat uses **TCP** (`socket.SOCK_STREAM`) to ensure that messages are delivered reliably and in order. This is important for a chat application where lost or out-of-order messages would be confusing to users. The server listens on port **54321**.
 
-- **Multi-client support** — the server handles as many clients as connect, each in its own thread
-- **Three request types:**
-  - `JOIN:<username>` — enter the chat room and announce yourself to everyone
-  - `MESSAGE:<text>` — broadcast a message to all connected users
-  - `LIST` — see a live list of who is currently online
-- **Real-time receiving** — a background thread on the client side means incoming messages appear instantly without interrupting your typing
-- **Graceful disconnection** — the server detects when a client leaves (cleanly or abruptly) and notifies the room
+Messages between the client and server follow a simple **prefix-based text format**:
 
----
+| Message Format     | Direction       | Meaning                                         |
+| ------------------ | --------------- | ----------------------------------------------- |
+| `JOIN:<username>`  | Client → Server | Register a username and enter the chat room     |
+| `MESSAGE:<text>`   | Client → Server | Broadcast a message to all connected users      |
+| `LIST`             | Client → Server | Request a list of all currently online users    |
+| `[PyChat] ...`     | Server → Client | Server system messages (welcome, announcements) |
+| `[username]: text` | Server → Client | Chat message broadcast from another user        |
 
-## Repository Structure
+# Development Environment
 
-```
-PyChat/
-├── server.py      # TCP server — run this first
-├── client.py      # TCP client — run one per user
-└── README.md      # This file
-```
+I developed PyChat using **Visual Studio Code** as my code editor. I used three separate terminal windows within VSCode simultaneously — one for the server and two for client instances — to test multi-client communication in real time.
 
----
+The project is written entirely in **Python 3**. No external packages or installations are required. The following built-in Python libraries were used:
 
-## How to Run
+- `socket` — for creating and managing TCP connections
+- `threading` — for handling multiple clients concurrently on the server side and for the background receive loop on the client side
+- `sys` — for clean program exit when the server disconnects
 
-### Prerequisites
+# Useful Websites
 
-- Python 3.7 or higher
-- No external packages required
+- [Python Official Documentation - socket](https://docs.python.org/3/library/socket.html)
+- [Python Official Documentation - threading](https://docs.python.org/3/library/threading.html)
+- [Real Python - Socket Programming in Python](https://realpython.com/python-sockets/)
+- [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
+- [Wikipedia - Client-Server Model](https://en.wikipedia.org/wiki/Client%E2%80%93server_model)
 
-### Step 1 — Start the server
+# Future Work
 
-Open a terminal and run:
-
-```bash
-python server.py
-```
-
-You should see:
-
-```
-[SERVER] PyChat server is running on 127.0.0.1:54321
-[SERVER] Waiting for clients to connect ...
-```
-
-### Step 2 — Connect a client
-
-Open a **second terminal** and run:
-
-```bash
-python client.py
-```
-
-### Step 3 — Connect a second client (to test broadcasting)
-
-Open a **third terminal** and run:
-
-```bash
-python client.py
-```
-
-### Step 4 — Start chatting
-
-In each client terminal, type commands and press Enter:
-
-```
-JOIN:Munashe
-MESSAGE:Hello everyone!
-LIST
-quit
-```
-
----
-
-## Example Session
-
-**Client 1 terminal:**
-
-```
-> JOIN:Munashe
-[PyChat] Welcome, Munashe! Type MESSAGE:<text> to chat or LIST to see who's online.
-> LIST
-[PyChat] Users currently online:
-  • Munashe
-  • Zimondi
-> MESSAGE:Hey Zimondi!
-[You]: Hey Zimondi!
-[Zimondi]: Hey Munashe, what's up!
-> quit
-[PyChat] Leaving the chat. See you next time!
-```
-
-**Client 2 terminal (Zimondi):**
-
-```
-> JOIN:Zimondi
-[PyChat] Welcome, Zimondi!
-[PyChat] *** Munashe has joined the chat ***
-[Munashe]: Hey Zimondi!
-> MESSAGE:Hey Munashe, what's up!
-```
-
----
-
-## Networking Concepts Demonstrated
-
-| Concept                            | Where Used                                                                 |
-| ---------------------------------- | -------------------------------------------------------------------------- |
-| TCP (SOCK_STREAM)                  | `socket.socket(AF_INET, SOCK_STREAM)` in both files                        |
-| `bind()` / `listen()` / `accept()` | `server.py` — `start_server()`                                             |
-| `connect()` / `send()` / `recv()`  | `client.py` — `start_client()`                                             |
-| Multi-threading                    | One thread per client on the server; one receive thread on the client      |
-| Client-Server model                | server.py is the hub; client.py instances are the spokes                   |
-| Graceful error handling            | `ConnectionResetError`, `BrokenPipeError`, `KeyboardInterrupt` all handled |
-| Thread safety                      | `threading.Lock()` protects the shared `clients` dictionary                |
-
----
-
-## Module Requirements Checklist
-
-### Common Requirements
-
-- [x] Software written from scratch (not a tutorial copy)
-- [x] All code documented with comments
-- [x] README.md fully filled out
-- [x] 4–5 minute demo video with talking head _(link above)_
-- [x] Published in a public GitHub repository
-
-### Unique Networking Requirements
-
-- [x] Client sends a request; server sends a response back
-- [x] Uses TCP
-- [x] **Additional:** Supports at least 3 different request types (JOIN, MESSAGE, LIST)
-- [x] Two separate programs: `server.py` and `client.py`
-
----
-
-## What I Learned
-
-Building PyChat taught me how TCP sockets actually work at the code level — not just as a concept. The trickiest part was managing shared state (the `clients` dictionary) safely across multiple threads using a `Lock`. I also learned that `recv()` is a blocking call, which is why a background thread on the client is necessary to keep the UI responsive while waiting for incoming messages. The project gave me a genuine appreciation for what chat apps like Slack or Discord are doing under the hood.
-
----
-
-## License
-
-This project was created for educational purposes as part of CSE 310 at BYU-Idaho.
+- Add a simple graphical user interface (GUI) using Tkinter so users are not limited to the terminal
+- Implement private messaging so users can send a direct message to one specific person rather than broadcasting to everyone
+- Add basic username authentication with a password so not just anyone can join the chat room
