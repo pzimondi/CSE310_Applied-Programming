@@ -6,7 +6,7 @@ A Python client-server chat application built from scratch using TCP sockets and
 
 ## 🎥 Demo Video
 
-> [Click here to watch the demo video](#) ← _(replace this link with your video URL before submitting)_
+> [https://drive.google.com/file/d/1sOQHxrybgLU1SMoxep3wcCU0G5k3YFu1/view?usp=sharing](#)
 
 ---
 
@@ -107,21 +107,21 @@ quit
 > LIST
 [PyChat] Users currently online:
   • Munashe
-  • Alice
-> MESSAGE:Hey Alice!
-[You]: Hey Alice!
-[Alice]: Hey Munashe, what's up!
+  • Zimondi
+> MESSAGE:Hey Zimondi!
+[You]: Hey Zimondi!
+[Zimondi]: Hey Munashe, what's up!
 > quit
 [PyChat] Leaving the chat. See you next time!
 ```
 
-**Client 2 terminal (Alice):**
+**Client 2 terminal (Zimondi):**
 
 ```
-> JOIN:Alice
-[PyChat] Welcome, Alice!
+> JOIN:Zimondi
+[PyChat] Welcome, Zimondi!
 [PyChat] *** Munashe has joined the chat ***
-[Munashe]: Hey Alice!
+[Munashe]: Hey Zimondi!
 > MESSAGE:Hey Munashe, what's up!
 ```
 
