@@ -6,7 +6,7 @@ A Python client-server chat application built from scratch using TCP sockets and
 
 ## 🎥 Demo Video
 
-> [https://drive.google.com/file/d/1sOQHxrybgLU1SMoxep3wcCU0G5k3YFu1/view?usp=sharing](#)
+> [https://drive.google.com/file/d/1sOQHxrybgLU1SMoxep3wcCU0G5k3YFu1/view?usp=sharing]
 
 ---
 
