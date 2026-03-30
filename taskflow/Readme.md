@@ -1,150 +1,52 @@
-# TaskFlow
+# TaskFlow — Web App
 
-A full-stack task management web application built with **Node.js**, **Express**, and **MongoDB Atlas**.
+TaskFlow is a full-stack task management web application that I built to learn how modern web servers work from the ground up. As a software engineer growing my skills, I wanted to understand how a backend server communicates with a frontend browser through a REST API, how HTTP verbs like GET, POST, PATCH, and DELETE map to real database operations, and how to persist data in a cloud database. This project gave me hands-on experience with all of those concepts in a single cohesive application.
 
-## Overview
+TaskFlow allows users to create tasks with a title and priority level, mark them as complete, delete them, and filter the list. All data is stored permanently in MongoDB Atlas so nothing is lost when the server restarts. To start the server on your computer, navigate to the project folder in your terminal and run `npm install` followed by `npm start`. Then open your browser and go to `http://localhost:3000` to see the first page of the app.
 
-TaskFlow lets you create, complete, and delete tasks from a clean browser UI. Every task is stored as a document in a MongoDB Atlas cloud database, so your list persists permanently. The app demonstrates a complete REST API workflow — the browser uses the `fetch()` API to talk to the Express server, which reads and writes to MongoDB via Mongoose.
+My purpose for writing this software was to move beyond terminal-based programs and learn how real web applications are structured. I specifically wanted to understand the relationship between a Node.js server, a REST API, a cloud database, and browser-side JavaScript — and how they all work together to create an interactive experience for the user.
 
-This project was built as Module 2 of **CSE 310 — Applied Programming** at Brigham Young University–Idaho.
+[Software Demo Video](https://youtu.be/UI12x5LA9PY)
 
-## Demo Video
+# Web Pages
 
-[Watch the walkthrough video here](YOUR_VIDEO_LINK_HERE)
+**Page 1 — index.html (Task List Page)**
+This is the main page of the application and the first page a user sees when they visit `http://localhost:3000`. The page is dynamically populated by Node.js — when the browser loads, the client-side JavaScript immediately calls the Express REST API at `GET /tasks`, which queries MongoDB Atlas and returns all stored tasks as JSON. The tasks are then rendered into the DOM by JavaScript. The content of this page changes entirely based on user input — adding a task sends a `POST /tasks` request to the server and the new task appears instantly, completing a task sends a `PATCH /tasks/:id` request and the item gets a strikethrough, deleting a task sends a `DELETE /tasks/:id` request and the item is removed. The sidebar stats (Total, Done, Pending) update live after every action. The filter buttons (All, Pending, Done) change which tasks are visible without reloading the page.
 
-## Development Environment
+**Page 2 — about.html (About Page)**
+This page is reached by clicking the About link in the sidebar navigation. It is dynamically populated by Node.js — when the page loads, the client-side JavaScript calls the Express `GET /stats` endpoint, which queries MongoDB Atlas and returns live counts of total tasks, completed tasks, pending tasks, and the most recently created task. These numbers are injected into the page in real time. The rest of the page describes the project, the tech stack, the features, and what I learned while building it. The user navigates back to the task list by clicking the Back to Tasks link.
 
-- **Runtime:** Node.js
-- **Framework:** Express 4
-- **Database:** MongoDB Atlas (cloud)
-- **ODM:** Mongoose
-- **CORS:** cors npm package
-- **Config:** dotenv for environment variables
-- **Frontend:** HTML5, CSS3 (custom properties)
-- **Client JS:** Vanilla ES6+ with fetch() API
+**Page 3 — 404.html (Not Found Page)**
+This page is served dynamically by Express for any URL that does not match a defined route or static file. For example, visiting `http://localhost:3000/anything` will trigger this page. Express catches the unmatched request and responds with this custom 404 page. It includes navigation links back to the main pages so the user is never stranded.
 
-## Project Structure
+# Development Environment
 
-```
-taskflow/
-├── server.js              ← Express entry point + MongoDB connection
-├── package.json           ← Dependencies and npm scripts
-├── .env.example           ← Template for your .env file
-├── .gitignore             ← Excludes node_modules and .env
-├── README.md              ← This file
-│
-├── models/
-│   └── Task.js            ← Mongoose schema defining a Task document
-│
-├── routes/
-│   └── tasks.js           ← REST API: GET / POST / PATCH / DELETE /tasks
-│
-└── public/
-    ├── index.html         ← Main task list page (Page 1)
-    ├── about.html         ← About page with live DB stats (Page 2)
-    ├── 404.html           ← Custom not-found page (Page 3)
-    ├── css/
-    │   └── style.css      ← All styles
-    └── js/
-        └── app.js         ← Client-side fetch() calls and DOM logic
-```
+I developed this application using Visual Studio Code as my code editor on Windows. I used the VS Code integrated terminal to run all Node.js and npm commands. MongoDB Atlas was used as the cloud-hosted database and was configured through the Atlas web dashboard at cloud.mongodb.com. I used a web browser (Chrome) for testing and viewing the application at localhost:3000.
 
-## Getting Started
+The application is written entirely in JavaScript. On the server side I used Node.js as the runtime environment and Express 4 as the web framework for handling HTTP routing and middleware. I used Mongoose as the Object Document Mapper to define schemas and interact with MongoDB. The dotenv package loads the MongoDB connection string from a .env file into the environment. The cors package allows the browser to make cross-origin fetch requests to the API without errors. On the client side I used vanilla JavaScript with the browser's built-in fetch API for all HTTP calls, and plain HTML5 and CSS3 for the user interface with no frontend framework.
 
-### Prerequisites
+# Useful Websites
 
-- [Node.js](https://nodejs.org/) v18 or later
-- A free [MongoDB Atlas](https://cloud.mongodb.com) account with a cluster
-
-### Setup
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/taskflow.git
-cd taskflow
-
-# 2. Install dependencies
-npm install
-
-# 3. Create your .env file
-# Copy .env.example to .env and fill in your MongoDB connection string
-# MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/taskflow?retryWrites=true&w=majority
-# PORT=3000
-
-# 4. Start the server
-npm start
-```
-
-Open your browser at **http://localhost:3000**
-
-### Development Mode (auto-restart on save)
-
-```bash
-npm run dev
-```
-
-## Features
-
-- Add tasks with a title and priority level (Low / Medium / High)
-- Mark tasks complete — click the circle to toggle; click again to undo
-- Delete tasks permanently with the ✕ button
-- Filter the list: All / Pending / Done
-- Live stats in the sidebar update instantly
-- Tasks persist in MongoDB Atlas across server restarts
-- About page fetches and displays live database stats from the server
-- Custom 404 page for any unknown URL
-
-## REST API Reference
-
-| Method   | Endpoint     | Description                                    |
-| -------- | ------------ | ---------------------------------------------- |
-| `GET`    | `/tasks`     | Return all tasks from MongoDB (newest first)   |
-| `POST`   | `/tasks`     | Create a new task `{ title, priority }`        |
-| `PATCH`  | `/tasks/:id` | Toggle the completed status of a task          |
-| `DELETE` | `/tasks/:id` | Permanently delete a task                      |
-| `GET`    | `/stats`     | Return live counts (total, completed, pending) |
-
-## Module Requirements Checklist
-
-### Common Requirements
-
-- [x] Software written by the student
-- [x] All code documented with useful comments
-- [x] README.md filled out completely using the Web Apps template
-- [x] 4–5 minute video with talking head, demo, and code walkthrough
-- [x] Code published in a public GitHub repository
-
-### Unique Requirements — Web Apps
-
-- [x] At least two HTML pages populated by NodeJS code — `index.html` and `about.html`
-- [x] Interactive — content changes based on user input (add / toggle / delete / filter)
-- [x] Runs on local test server — Express on port 3000
-- [x] Database integrated — MongoDB Atlas via Mongoose ✅ (optional requirement)
-- [x] Third dynamically generated page — `404.html` ✅ (optional requirement)
-
-## Useful Links
-
-- [Express.js Documentation](https://expressjs.com/)
-- [Mongoose Documentation](https://mongoosejs.com/docs/)
+- [Express.js Official Documentation](https://expressjs.com/)
+- [Mongoose Official Documentation](https://mongoosejs.com/docs/)
 - [MongoDB Atlas](https://cloud.mongodb.com)
-- [MDN fetch() API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [MDN Web Docs — fetch() API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [MDN Web Docs — async/await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises)
+- [Node.js Official Documentation](https://nodejs.org/en/docs/)
 - [dotenv npm package](https://www.npmjs.com/package/dotenv)
+- [Wikipedia — Dynamic Web Page](https://en.wikipedia.org/wiki/Dynamic_web_page)
+- [cors npm package](https://www.npmjs.com/package/cors)
 
-## Author
+# Future Work
 
-**Pastor Munashe Zimondi**
-CSE 310 — Applied Programming
-Brigham Young University–Idaho
+- Add user authentication so each user has their own private task list with login and logout functionality
+- Add due dates to tasks with a calendar picker and the ability to sort or filter by deadline
+- Add the ability to edit a task title or change its priority after it has been created
+- Deploy the application to a cloud hosting service such as Render or Railway so it is accessible from any device without running a local server
+- Add email or browser notifications to remind users of tasks that are due soon
+- Add drag and drop reordering so users can manually arrange tasks by importance
 
 ```
 
 ---
-
-**Important:** After you record your video, find this line in the README:
-```
-
-[Watch the walkthrough video here](YOUR_VIDEO_LINK_HERE)
-
-```
-
 ```
