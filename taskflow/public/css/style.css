@@ -1,0 +1,627 @@
+/**
+ * public/css/style.css — TaskFlow Styles
+ *
+ * Design: editorial/industrial — dark theme, amber accent,
+ * tight grid. Every element has a clear purpose.
+ *
+ * Author: Pastor Munashe Zimondi
+ * Module: Web Apps — CSE 310
+ */
+
+/* ─── Custom Properties ───────────────────────────────────────────── */
+:root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface-2: #222222;
+    --border: #2a2a2a;
+    --accent: #f0a500;
+    --accent-dim: #c47f00;
+    --text: #e8e8e8;
+    --text-muted: #888;
+    --text-faint: #444;
+    --low: #5b8cff;
+    --medium: #f0a500;
+    --high: #ff5c5c;
+    --success: #3ecf8e;
+    --radius: 8px;
+    --sidebar-w: 220px;
+    --transition: 180ms ease;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    display: flex;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+.sidebar {
+    width: var(--sidebar-w);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.25rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    gap: 2rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.brand-icon {
+    font-size: 1.4rem;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.brand-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background var(--transition), color var(--transition);
+}
+
+.nav-link:hover {
+    background: var(--surface-2);
+    color: var(--text);
+}
+
+.nav-link.active {
+    background: var(--surface-2);
+    color: var(--accent);
+}
+
+.nav-icon {
+    font-size: 0.85rem;
+}
+
+/* Sidebar stats */
+.sidebar-stats {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.stat-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--text);
+    transition: color var(--transition);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ─── Main Content ────────────────────────────────────────────────── */
+.main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 2.5rem 3rem;
+    max-width: 860px;
+}
+
+/* ─── Page Header ─────────────────────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.page-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.25rem;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+.page-sub {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+/* ─── Filter Buttons ──────────────────────────────────────────────── */
+.filters {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+}
+
+/* ─── Add Task Form ───────────────────────────────────────────────── */
+.add-task-section {
+    margin-bottom: 2rem;
+}
+
+.add-task-card {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    transition: border-color var(--transition);
+}
+
+.add-task-card:focus-within {
+    border-color: var(--accent);
+}
+
+.task-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.task-input::placeholder {
+    color: var(--text-faint);
+}
+
+.priority-select {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: calc(var(--radius) - 2px);
+    outline: none;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: calc(var(--radius) - 2px);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--transition);
+}
+
+.add-btn:hover {
+    background: var(--accent-dim);
+}
+
+.form-error {
+    font-size: 0.8rem;
+    color: var(--high);
+    margin-top: 0.5rem;
+    min-height: 1em;
+    padding-left: 0.25rem;
+}
+
+/* ─── Task List ───────────────────────────────────────────────────── */
+.task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    animation: slide-in 250ms ease both;
+    transition: border-color var(--transition), opacity var(--transition);
+}
+
+.task-item:hover {
+    border-color: var(--surface-2);
+}
+
+.task-item.done {
+    opacity: 0.5;
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Priority colour stripe on left edge */
+.task-item::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 1.6rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.task-item[data-priority="low"]::before {
+    background: var(--low);
+}
+
+.task-item[data-priority="medium"]::before {
+    background: var(--medium);
+}
+
+.task-item[data-priority="high"]::before {
+    background: var(--high);
+}
+
+/* Checkbox circle */
+.task-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition), background var(--transition);
+}
+
+.task-check:hover {
+    border-color: var(--success);
+}
+
+.task-check.checked {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.task-check.checked::after {
+    content: '✓';
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* Task title */
+.task-title {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--text);
+    transition: color var(--transition);
+    word-break: break-word;
+}
+
+.task-item.done .task-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* Priority badge */
+.priority-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.18rem 0.5rem;
+    border-radius: 100px;
+    flex-shrink: 0;
+}
+
+.priority-badge.low {
+    background: rgba(91, 140, 255, 0.15);
+    color: var(--low);
+}
+
+.priority-badge.medium {
+    background: rgba(240, 165, 0, 0.15);
+    color: var(--medium);
+}
+
+.priority-badge.high {
+    background: rgba(255, 92, 92, 0.15);
+    color: var(--high);
+}
+
+/* Delete button */
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 4px;
+    line-height: 1;
+    transition: color var(--transition);
+    flex-shrink: 0;
+}
+
+.delete-btn:hover {
+    color: var(--high);
+}
+
+/* ─── Empty State ─────────────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--text-faint);
+}
+
+/* ─── About Page ──────────────────────────────────────────────────── */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.about-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.about-card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+}
+
+.about-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.about-card strong {
+    color: var(--text);
+}
+
+.about-card code {
+    background: var(--surface-2);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+.about-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.about-list li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding-left: 1rem;
+    position: relative;
+}
+
+.about-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text-faint);
+}
+
+.about-list strong {
+    color: var(--text);
+}
+
+/* ─── Live Stats (About Page) ─────────────────────────────────────── */
+.live-stats-card {
+    border-color: var(--accent) !important;
+}
+
+.live-stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.live-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 80px;
+}
+
+.live-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.live-stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+/* ─── Back Link ───────────────────────────────────────────────────── */
+.back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: opacity var(--transition);
+}
+
+.back-link:hover {
+    opacity: 0.75;
+}
+
+/* ─── 404 Page ────────────────────────────────────────────────────── */
+.not-found {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 5rem;
+}
+
+.not-found-code {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 6rem;
+    color: var(--text-faint);
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.not-found-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.not-found p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+
+    .sidebar-stats {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+}

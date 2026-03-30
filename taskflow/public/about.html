@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About — TaskFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">⬡</span>
+            <span class="brand-name">TaskFlow</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/" class="nav-link"><span class="nav-icon">◈</span> All Tasks</a>
+            <a href="/about.html" class="nav-link active"><span class="nav-icon">◇</span> About</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">About TaskFlow</h1>
+                <p class="page-sub">How it was built and why.</p>
+            </div>
+        </header>
+
+        <section class="about-grid">
+
+            <div class="about-card">
+                <h2 class="about-card-title">The Project</h2>
+                <p>TaskFlow is a full-stack task management web application built as part of <strong>CSE 310 — Applied
+                        Programming</strong> at Brigham Young University–Idaho.</p>
+                <p>The goal was to learn how a real web server works from the ground up — how the front end and back end
+                    communicate through a REST API, and how to persist data in a cloud database.</p>
+            </div>
+
+            <div class="about-card">
+                <h2 class="about-card-title">Tech Stack</h2>
+                <ul class="about-list">
+                    <li><strong>Node.js</strong> — JavaScript runtime for the server</li>
+                    <li><strong>Express</strong> — handles routing and middleware</li>
+                    <li><strong>MongoDB Atlas</strong> — cloud database for task storage</li>
+                    <li><strong>Mongoose</strong> — schema validation and DB queries</li>
+                    <li><strong>Vanilla JS (fetch API)</strong> — client-side REST calls</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <h2 class="about-card-title">Features</h2>
+                <ul class="about-list">
+                    <li>Add tasks with title and priority level</li>
+                    <li>Mark tasks complete — toggles back if needed</li>
+                    <li>Delete tasks permanently</li>
+                    <li>Filter: All / Pending / Done</li>
+                    <li>Persistent storage via MongoDB Atlas</li>
+                    <li>Live stats fetched from the server</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <h2 class="about-card-title">What I Learned</h2>
+                <p>This was my first time building for a browser. The biggest shift from Python was asynchronous
+                    JavaScript — async/await and fetch() don't block the page while waiting for a server response.</p>
+                <p>CORS was the first stumbling block. Installing the <code>cors</code> npm package and calling
+                    <code>app.use(cors())</code> before any endpoints solved it immediately.</p>
+            </div>
+
+        </section>
+
+        <!-- Live Database Stats — fetched from GET /stats on the Node server -->
+        <div class="about-card live-stats-card" style="margin-top: 1rem;">
+            <h2 class="about-card-title">Live Database Stats</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                These numbers are pulled live from MongoDB every time this page loads.
+            </p>
+            <div class="live-stats-grid">
+                <div class="live-stat">
+                    <span class="live-stat-num" id="ls-total">—</span>
+                    <span class="live-stat-label">Total Tasks</span>
+                </div>
+                <div class="live-stat">
+                    <span class="live-stat-num" id="ls-done">—</span>
+                    <span class="live-stat-label">Completed</span>
+                </div>
+                <div class="live-stat">
+                    <span class="live-stat-num" id="ls-pending">—</span>
+                    <span class="live-stat-label">Pending</span>
+                </div>
+                <div class="live-stat" style="flex: 2; min-width: 200px;">
+                    <span class="live-stat-num" id="ls-latest"
+                        style="font-size: 0.95rem; font-family: 'DM Sans', sans-serif; font-weight: 400;">—</span>
+                    <span class="live-stat-label">Most Recent Task</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2.5rem;">
+            <a href="/" class="back-link">← Back to Tasks</a>
+        </div>
+
+    </main>
+
+    <script>
+        /**
+         * Fetches live task statistics from GET /stats and populates
+         * the Live Database Stats section. This makes about.html
+         * dynamically server-driven, not just a static page.
+         */
+        async function loadStats() {
+            try {
+                const response = await fetch("http://localhost:3000/stats");
+                if (!response.ok) throw new Error("Stats unavailable");
+                const data = await response.json();
+                document.getElementById("ls-total").textContent = data.total;
+                document.getElementById("ls-done").textContent = data.completed;
+                document.getElementById("ls-pending").textContent = data.pending;
+                document.getElementById("ls-latest").textContent =
+                    data.latest ? data.latest.title : "No tasks yet";
+            } catch (err) {
+                document.getElementById("ls-latest").textContent = "Could not connect to server";
+            }
+        }
+
+        // Run immediately when the page loads
+        loadStats();
+    </script>
+
+</body>
+
+</html>
